@@ -1,16 +1,16 @@
 package com.epam.info.handling.data.parser.builder;
 
 import com.epam.info.handling.data.parser.Parser;
-import com.epam.info.handling.data.parser.builder.impl.ChainBuilder;
+import com.epam.info.handling.data.parser.builder.impl.ParserChainBuilder;
 import com.epam.info.handling.data.parser.impl.TextParser;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ChainBuilderTests {
+public class ParserChainBuilderTests {
 
     @Test
     public void testBuildShouldReturnNewTextParser() {
-        Builder<Parser> builder = new ChainBuilder();
+        ChainBuilder<Parser> builder = new ParserChainBuilder();
 
         Parser textParser = builder.build();
 

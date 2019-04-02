@@ -14,7 +14,7 @@ public class Lexeme implements Component {
         this.type = type;
     }
 
-    // методы статической генерации
+    // methods of static generation
     public static Lexeme word(String value) {
         return new Lexeme(value, LexemeType.WORD);
     }

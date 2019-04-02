@@ -4,6 +4,6 @@ import com.epam.info.handling.data.composite.Component;
 
 import java.util.List;
 
-public interface Sorter {
-    List<Component> sort(List<Component> sorted);
+public interface Sorter<T extends Component> {
+    List<T> sort(List<T> sorted);
 }

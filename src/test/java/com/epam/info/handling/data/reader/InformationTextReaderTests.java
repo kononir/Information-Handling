@@ -2,11 +2,11 @@ package com.epam.info.handling.data.reader;
 
 import com.epam.info.handling.data.reader.exception.InvalidPathException;
 import com.epam.info.handling.data.reader.exception.ReadingException;
-import com.epam.info.handling.data.reader.impl.TextFileReaderImpl;
+import com.epam.info.handling.data.reader.impl.InformationTextReader;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TextFileReaderImplTests {
+public class InformationTextReaderTests {
     private static final String PATH_TO_FILE_WITH_ONE_PARAGRAPH = "src/test/resources/one_paragraph.txt";
     private static final String PATH_TO_FILE_WITH_TWO_PARAGRAPHS = "src/test/resources/two_paragraphs.txt";
     private static final String INVALID_PATH = "invalid path";
@@ -17,7 +17,7 @@ public class TextFileReaderImplTests {
     @Test
     public void testReadShouldReturnTextWithOneParagraphWhenGivenValidPathToTextWithOneParagraph()
             throws ReadingException, InvalidPathException {
-        TextFileReader reader = new TextFileReaderImpl();
+        TextReader reader = new InformationTextReader();
 
         String actual = reader.read(PATH_TO_FILE_WITH_ONE_PARAGRAPH);
 
@@ -27,7 +27,7 @@ public class TextFileReaderImplTests {
     @Test
     public void testReadShouldReturnTextWithTwoParagraphsWhenGivenValidPathToTextWithTwoParagraphs()
             throws ReadingException, InvalidPathException {
-        TextFileReader reader = new TextFileReaderImpl();
+        TextReader reader = new InformationTextReader();
 
         String actual = reader.read(PATH_TO_FILE_WITH_TWO_PARAGRAPHS);
 
@@ -37,7 +37,7 @@ public class TextFileReaderImplTests {
     @Test(expected = InvalidPathException.class)
     public void testReadShouldThrowInvalidPathExceptionWhenGivenInvalidPath()
             throws ReadingException, InvalidPathException {
-        TextFileReader reader = new TextFileReaderImpl();
+        TextReader reader = new InformationTextReader();
 
         reader.read(INVALID_PATH);
 

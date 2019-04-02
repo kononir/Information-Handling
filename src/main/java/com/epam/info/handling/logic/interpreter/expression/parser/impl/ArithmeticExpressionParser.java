@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExpressionParserImpl implements ExpressionParser<Integer> {
+public class ArithmeticExpressionParser implements ExpressionParser<Integer> {
     private static final String NUMBERS_REGEXP = "\\d+";
     private static final String OPERATIONS_REGEXP = "[+\\-/*^]";
 
     @Override
-    public List<AbstractExpression> parse(String expressionText) {
-        List<AbstractExpression> expressions = new ArrayList<>();
+    public List<AbstractExpression<Integer>> parse(String expressionText) {
+        List<AbstractExpression<Integer>> expressions = new ArrayList<>();
 
         List<String> textExpressions = splitExpression(expressionText, NUMBERS_REGEXP);
         textExpressions.addAll(splitExpression(expressionText, OPERATIONS_REGEXP));

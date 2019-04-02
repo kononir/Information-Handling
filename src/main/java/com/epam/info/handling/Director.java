@@ -2,21 +2,26 @@ package com.epam.info.handling;
 
 import com.epam.info.handling.data.composite.Component;
 import com.epam.info.handling.data.parser.Parser;
-import com.epam.info.handling.data.parser.builder.Builder;
-import com.epam.info.handling.data.reader.TextFileReader;
+import com.epam.info.handling.data.parser.builder.ChainBuilder;
+import com.epam.info.handling.data.reader.TextReader;
 import com.epam.info.handling.data.reader.exception.InvalidPathException;
 import com.epam.info.handling.data.reader.exception.ReadingException;
-import com.epam.info.handling.logic.interpreter.ExpressionInterpreter;
+import com.epam.info.handling.data.recovery.RecoveryExecutor;
+import com.epam.info.handling.data.recovery.exception.TextRecoveryInvalidLexemeValueException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Director {
-    private TextFileReader reader;
-    private Builder<Parser> parserBuilder;
-    private ExpressionInterpreter<Integer> interpreter;
+    private TextReader reader;
+    private ChainBuilder<Parser> parserBuilder;
+    private RecoveryExecutor recoveryExecutor;
 
-    public Director(TextFileReader reader, Builder<Parser> parserBuilder, ExpressionInterpreter<Integer> interpreter) {
+    private static final Logger LOGGER = LogManager.getRootLogger();
+
+    public Director(TextReader reader, ChainBuilder<Parser> parserBuilder, RecoveryExecutor recoveryExecutor) {
         this.reader = reader;
         this.parserBuilder = parserBuilder;
-        this.interpreter = interpreter;
+        this.recoveryExecutor = recoveryExecutor;
     }
 
     public String handleInformation(String path) {
@@ -27,8 +32,10 @@ public class Director {
 
             Parser textParser = parserBuilder.build();
             Component component = textParser.parse(text);
-        } catch (InvalidPathException | ReadingException e) {
-            e.printStackTrace();
+
+            recoveringText = recoveryExecutor.executeRecovery(component);
+        } catch (InvalidPathException | ReadingException | TextRecoveryInvalidLexemeValueException e) {
+            LOGGER.fatal(e);
         }
 
         return recoveringText;

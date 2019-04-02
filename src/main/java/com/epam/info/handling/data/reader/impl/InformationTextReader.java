@@ -1,12 +1,12 @@
 package com.epam.info.handling.data.reader.impl;
 
-import com.epam.info.handling.data.reader.TextFileReader;
+import com.epam.info.handling.data.reader.TextReader;
 import com.epam.info.handling.data.reader.exception.InvalidPathException;
 import com.epam.info.handling.data.reader.exception.ReadingException;
 
 import java.io.*;
 
-public class TextFileReaderImpl implements TextFileReader {
+public class InformationTextReader implements TextReader {
 
     @Override
     public String read(String path) throws InvalidPathException, ReadingException {

@@ -1,35 +1,36 @@
 package com.epam.info.handling.logic.interpreter.impl;
 
 import com.epam.info.handling.logic.interpreter.ExpressionInterpreter;
-import com.epam.info.handling.logic.interpreter.context.Context;
-import com.epam.info.handling.logic.interpreter.context.IntegerContext;
-import com.epam.info.handling.logic.interpreter.exception.InvalidContextException;
-import com.epam.info.handling.logic.interpreter.exception.InvalidExpressionsException;
+import com.epam.info.handling.logic.interpreter.exception.InvalidExpressionParserException;
+import com.epam.info.handling.logic.interpreter.exception.InvalidExpressionTextException;
 import com.epam.info.handling.logic.interpreter.expression.AbstractExpression;
 import com.epam.info.handling.logic.interpreter.expression.impl.NonTerminalExpressionNumber;
 import com.epam.info.handling.logic.interpreter.expression.impl.TerminalExpressionAdd;
+import com.epam.info.handling.logic.interpreter.expression.parser.ExpressionParser;
+import com.epam.info.handling.logic.interpreter.expression.parser.impl.ArithmeticExpressionParser;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 
 public class ArithmeticExpressionInterpreterTests {
+    private static final Integer OPERAND = 5;
     private static final Integer ANSWER = 10;
+
+    private static final String INTERPRETED_LINE = "5_5+";
+    private static final String NULL_LINE = null;
+
+    private static final ExpressionParser<Integer> NULL_PARSER = null;
 
     @Test
     public void testCalculateShouldReturnResultOfAddingTwoNumbersWhenGivenListWithThreeExpressionsToAdd()
-            throws InvalidExpressionsException, InvalidContextException {
-        Context<Integer> context = mock(IntegerContext.class);
-        when(context.popValue()).thenReturn(ANSWER);
-
-        AbstractExpression<Integer> firstExpressionNumber = mock(NonTerminalExpressionNumber.class);
-        AbstractExpression<Integer> secondExpressionNumber = mock(NonTerminalExpressionNumber.class);
-        AbstractExpression<Integer> expressionAdd = mock(TerminalExpressionAdd.class);
+            throws InvalidExpressionTextException, InvalidExpressionParserException {
+        AbstractExpression<Integer> firstExpressionNumber = new NonTerminalExpressionNumber(OPERAND);
+        AbstractExpression<Integer> secondExpressionNumber = new NonTerminalExpressionNumber(OPERAND);
+        AbstractExpression<Integer> expressionAdd = new TerminalExpressionAdd();
 
         List<AbstractExpression<Integer>> expressions = Arrays.asList(
                 firstExpressionNumber,
@@ -37,52 +38,35 @@ public class ArithmeticExpressionInterpreterTests {
                 expressionAdd
         );
 
-        ExpressionInterpreter<Integer> interpreter = new ArithmeticExpressionInterpreter();
+        ExpressionParser<Integer> expressionParser = mock(ArithmeticExpressionParser.class);
+        when(expressionParser.parse(INTERPRETED_LINE)).thenReturn(expressions);
 
-        Integer actual = interpreter.calculate(expressions, context);
+        ExpressionInterpreter<Integer> interpreter = new ArithmeticExpressionInterpreter(expressionParser);
+
+        Integer actual = interpreter.calculate(INTERPRETED_LINE);
 
         Assert.assertEquals(ANSWER, actual);
-
-        verify(firstExpressionNumber, atLeastOnce()).interpret(context);
-        verify(secondExpressionNumber, atLeastOnce()).interpret(context);
-        verify(expressionAdd, atLeastOnce()).interpret(context);
-
-        verify(context, atLeastOnce()).popValue();
+        verify(expressionParser, atLeastOnce()).parse(INTERPRETED_LINE);
     }
 
-    @Test(expected = InvalidExpressionsException.class)
-    public void testCalculateShouldThrowInvalidExpressionsExceptionWhenGivenNullExpressions()
-            throws InvalidExpressionsException, InvalidContextException {
-        List<AbstractExpression<Integer>> expressions = null;
+    @Test(expected = InvalidExpressionTextException.class)
+    public void testCalculateShouldThrowInvalidExpressionTextExceptionWhenGivenNullExpression()
+            throws InvalidExpressionTextException, InvalidExpressionParserException {
+        ExpressionParser<Integer> expressionParser = new ArithmeticExpressionParser();
+        ExpressionInterpreter<Integer> interpreter = new ArithmeticExpressionInterpreter(expressionParser);
 
-        ExpressionInterpreter<Integer> interpreter = new ArithmeticExpressionInterpreter();
-        Context<Integer> context = new IntegerContext();
-
-        interpreter.calculate(expressions, context);
+        interpreter.calculate(NULL_LINE);
 
         Assert.fail();
     }
 
-    @Test(expected = InvalidExpressionsException.class)
-    public void testCalculateShouldThrowInvalidExpressionsExceptionWhenGivenEmptyExpressions()
-            throws InvalidExpressionsException, InvalidContextException {
-        List<AbstractExpression<Integer>> expressions = new ArrayList<>();
+    @Test(expected = InvalidExpressionParserException.class)
+    public void testCalculateShouldThrowInvalidExpressionParserExceptionWhenGivenNullParser()
+            throws InvalidExpressionTextException, InvalidExpressionParserException {
+        ExpressionInterpreter<Integer> interpreter = new ArithmeticExpressionInterpreter(NULL_PARSER);
 
-        ExpressionInterpreter<Integer> interpreter = new ArithmeticExpressionInterpreter();
-        Context<Integer> context = new IntegerContext();
+        interpreter.calculate(INTERPRETED_LINE);
 
-        interpreter.calculate(expressions, context);
-    }
-
-    @Test(expected = InvalidContextException.class)
-    public void testCalculateShouldThrowInvalidExpressionsExceptionWhenGivenEmptyContext()
-            throws InvalidExpressionsException, InvalidContextException {
-        AbstractExpression<Integer> expression = new TerminalExpressionAdd();
-        List<AbstractExpression<Integer>> expressions = Collections.singletonList(expression);
-
-        ExpressionInterpreter<Integer> interpreter = new ArithmeticExpressionInterpreter();
-        Context<Integer> context = null;
-
-        interpreter.calculate(expressions, context);
+        Assert.fail();
     }
 }

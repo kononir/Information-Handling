@@ -1,13 +1,13 @@
 package com.epam.info.handling.data.parser.builder.impl;
 
 import com.epam.info.handling.data.parser.Parser;
-import com.epam.info.handling.data.parser.builder.Builder;
+import com.epam.info.handling.data.parser.builder.ChainBuilder;
 import com.epam.info.handling.data.parser.impl.LexemeParser;
 import com.epam.info.handling.data.parser.impl.ParagraphParser;
 import com.epam.info.handling.data.parser.impl.SentenceParser;
 import com.epam.info.handling.data.parser.impl.TextParser;
 
-public class ChainBuilder implements Builder<Parser> {
+public class ParserChainBuilder implements ChainBuilder<Parser> {
 
     @Override
     public Parser build() {
