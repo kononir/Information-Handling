@@ -19,7 +19,7 @@ public abstract class AbstractParser implements Parser {
     }
 
     protected Component findAllComponents(String text, String searchingRegexp) {
-        Pattern pattern = Pattern.compile(searchingRegexp);
+        Pattern pattern = Pattern.compile(searchingRegexp, Pattern.UNICODE_CHARACTER_CLASS);
         Matcher matcher = pattern.matcher(text);
 
         Component compositeText = new Composite();

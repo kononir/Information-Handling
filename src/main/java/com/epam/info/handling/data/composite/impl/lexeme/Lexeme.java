@@ -19,6 +19,10 @@ public class Lexeme implements Component {
         return new Lexeme(value, LexemeType.WORD);
     }
 
+    public static Lexeme punctuationMark(String value) {
+        return new Lexeme(value, LexemeType.PUNCTUATION_MARK);
+    }
+
     public static Lexeme expression(String value) {
         return new Lexeme(value, LexemeType.EXPRESSION);
     }
@@ -27,8 +31,16 @@ public class Lexeme implements Component {
         return value;
     }
 
-    public LexemeType getType() {
-        return type;
+    public boolean isWord() {
+        return LexemeType.WORD.equals(type);
+    }
+
+    public boolean isPunctuationMark() {
+        return LexemeType.PUNCTUATION_MARK.equals(type);
+    }
+
+    public boolean isExpression() {
+        return LexemeType.EXPRESSION.equals(type);
     }
 
     @Override

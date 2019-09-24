@@ -12,10 +12,8 @@ public class InformationTextReader implements TextReader {
     public String read(String path) throws InvalidPathException, ReadingException {
         StringBuilder textBuilder = new StringBuilder();
 
-        try {
-            File file = new File(path);
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-
+        File file = new File(path);
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             String firstLine = bufferedReader.readLine();
             if (firstLine != null) {
                 textBuilder.append(firstLine);

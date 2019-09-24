@@ -2,9 +2,7 @@ package com.epam.info.handling.data.parser.impl;
 
 import com.epam.info.handling.data.composite.Component;
 import com.epam.info.handling.data.composite.impl.lexeme.Lexeme;
-import com.epam.info.handling.data.composite.impl.lexeme.LexemeType;
 import com.epam.info.handling.data.parser.Parser;
-import com.epam.info.handling.data.parser.impl.LexemeParser;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,8 +20,7 @@ public class LexemeParserTests {
 
         Lexeme wordLexeme = (Lexeme) wordComponent;
 
-        LexemeType lexemeType = wordLexeme.getType();
-        Assert.assertEquals(LexemeType.WORD, lexemeType);
+        Assert.assertTrue(wordLexeme.isWord());
 
         String word = wordLexeme.getValue();
         Assert.assertEquals(WORD, word);
@@ -39,8 +36,7 @@ public class LexemeParserTests {
 
         Lexeme expressionLexeme = (Lexeme) expressionComponent;
 
-        LexemeType lexemeType = expressionLexeme.getType();
-        Assert.assertEquals(LexemeType.EXPRESSION, lexemeType);
+        Assert.assertTrue(expressionLexeme.isExpression());
 
         String expression = expressionLexeme.getValue();
         Assert.assertEquals(EXPRESSION, expression);

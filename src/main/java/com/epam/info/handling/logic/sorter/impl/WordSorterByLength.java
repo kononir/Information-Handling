@@ -13,7 +13,7 @@ public class WordSorterByLength implements Sorter<Lexeme> {
     @Override
     public List<Lexeme> sort(List<Lexeme> lexemes) {
         return lexemes.stream()
-                .filter(lexeme -> lexeme.getType() == LexemeType.WORD)
+                .filter(Lexeme::isWord)
                 .sorted(new LexemeLengthComparator())
                 .collect(Collectors.toList());
     }
